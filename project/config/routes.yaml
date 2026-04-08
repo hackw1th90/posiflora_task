@@ -1,0 +1,30 @@
+controllers:
+  resource:
+    path: '../src/Controller/'
+    namespace: App\Controller
+  type: attribute
+  defaults:
+    _locale: '%app.locale%'
+  prefix: ""
+  utf8: true
+  schemes: [ https ]
+
+api_order_create:
+  path: "/shops/{shopId}/orders"
+  controller: App\Controller\OrderController::add
+  methods: ['post']
+
+api_telegram_connect:
+  path: "/shops/{shopId}/telegram/connect"
+  controller: App\Controller\TelegramController::manage
+  methods: ['post']
+
+api_telegram_status:
+  path: "/shops/{shopId}/telegram/status"
+  controller: App\Controller\TelegramController::view
+  methods: ['get']
+
+web_main:
+  path: "/shops/{shopId}/growth/telegram"
+  controller: App\Controller\WebController::main
+  methods: ['get']

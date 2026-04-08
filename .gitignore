@@ -1,0 +1,6 @@
+var
+.idea
+project/.env
+project/vendor
+project/var
+project/config/reference.php

@@ -1,0 +1,9 @@
+framework:
+  secret: '%env(APP_SECRET)%'
+  default_locale: en
+  router:
+    default_uri: '/'
+
+parameters:
+  # if the SECRET env var value is not defined anywhere, Symfony uses this value
+  env(APP_SECRET): 'POSIFLORASECRET'

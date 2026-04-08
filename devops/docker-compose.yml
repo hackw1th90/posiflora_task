@@ -1,0 +1,72 @@
+name: posiflora-task
+services:
+
+  posiflora-db:
+    image: postgres:15
+    container_name: posiflora-db
+    hostname: posiflora-db
+    ports:
+      - '${POSTGRES_PORT}:5432'
+    volumes:
+      - '${DATA_POSTGRES}:/var/lib/postgresql/data' # ./../../var/run/data/postgresql/v1
+    networks:
+      - posiflora-net
+    environment:
+      PGPASSWORD: "${PGPASSWORD}" # ---
+      POSTGRES_DB: "${POSTGRES_DB}" # ---
+      POSTGRES_USER: "${POSTGRES_USER}" # postgres!!!
+      POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}" # ---
+    healthcheck:
+      test: [ 'CMD', 'pg_isready','-q' , '-d', '-U',  '${POSTGRES_USER}' ]
+      retries: 3
+      timeout: 5s
+
+  posiflora-apps:
+    build:
+      context: .
+    container_name: posiflora-apps
+    hostname: posiflora-lc
+    image: posiflora:apps
+    user: www-data
+    extra_hosts:
+      - 'host.docker.internal:host-gateway'
+    volumes:
+      - '${DIR_PROJECT}:/var/www/html'
+      - '${FILE_ENV_DEV}:/var/www/html/.env'
+      - '${DIR_PROJECT_CACHE}:/var/www/html/var/cache'
+      - '${SCRIPT_STARTUP}:/startup.sh'
+    environment:
+      XDEBUG_CONFIG: "max_nesting_level=256 start_with_request=yes client_host=host.docker.internal discover_client_host=true idekey=posiflora client_port=9200"
+      PHP_IDE_CONFIG: "serverName=posifloraSymfony"
+      XDEBUG_MODE: "debug"
+    depends_on:
+      - posiflora-db
+    networks:
+      - posiflora-net
+    command: ["sh", "-c", "/startup.sh && exec \"$@\""]
+
+  posiflora-nginx:
+    container_name: posiflora-nginx
+    hostname: posiflora-proxy
+    image: nginx
+    volumes:
+      - '${DATA_APP_PUBLIC}/assets:/var/www/html/assets'
+      - ./resources/nginx/nginx.conf:/etc/nginx/conf.d/nginx.conf
+      - ./resources/nginx/ssl:/etc/nginx/certs
+      - '${DIR_NGINX_LOG}:/var/log/nginx'
+    ports:
+      - '${NGINX_PORT}:443'
+    depends_on:
+      - posiflora-db
+      - posiflora-apps
+    networks:
+      - posiflora-net
+
+networks:
+  posiflora-net:
+    driver: bridge
+    name: posiflora-net
+    ipam:
+      driver: default
+      config:
+        - subnet: 203.171.0.0/16

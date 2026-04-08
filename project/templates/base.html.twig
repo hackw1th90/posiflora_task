@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>{{ title }}</title>
+</head>
+<body>
+
+<div id="app">
+
+    <table style="width: 100%">
+
+        <tr>
+            <td colspan="2" style="padding: 20px; background: #8bf">
+                <table style="">
+                    <tr>
+                        <td>
+                            <p>Order number:<br/>
+                                <input type="text" id="form-order-number" name="number" value="" size="28"
+                                       placeholder=""
+                                       style="padding: 8px 12px; font-size: 100%"/></p>
+                        </td>
+                        <td>
+                            <p>Total:<br/>
+                                <input type="text" id="form-order-total" name="total" value="" size="28"
+                                       placeholder=""
+                                       style="padding: 8px 12px; font-size: 100%"/></p>
+                        </td>
+                        <td>
+                            <p>Customer name:<br/>
+                                <input type="text" id="form-order-customerName" name="customerName" value="" size="28"
+                                       placeholder=""
+                                       style="padding: 8px 12px; font-size: 100%"/></p>
+                        </td>
+                        <td>
+                            <p>
+                                <button @click="createOrder({{ id }})" style="font-size: 140%; padding: 10px 20px; margin-top: 10px;
+                             margin-left: 10px; cursor: pointer">CREATE
+                                    new order
+                                </button>
+                            </p>
+                        </td>
+                        <td>
+                            <p>
+                                <button @click="getStats({{ id }})" style="font-size: 140%; padding: 10px 20px; margin-top: 10px;
+                             margin-left: 10px; cursor: pointer">GetStats
+                                </button>
+                            </p>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td style="padding-right: 80px">
+                <h1 style="background: #369; color: #fff; padding: 4px 12px; text-align: center">{{ name }}</h1>
+                <p>Token:<br/>
+                    <textarea id="form-botToken" name="botToken" rows="8" cols="44"
+                              style="padding: 8px 12px; font-size: 120%"
+                    > </textarea></p>
+                <p>Chat ID:<br/>
+                    <input type="text" id="form-chatId" name="chatId" value="" size="32"
+                           placeholder="input chat-id here (number)..."
+                           style="padding: 8px 12px; font-size: 160%"/></p>
+                <p>
+                <form id="ttt">
+                    <p>
+
+                        <select id="form-enabled" style="font-size: 240%; padding: 8px 12px">
+                            <option value="false">FALSE</option>
+                            <option value="true" selected>TRUE</option>
+                        </select>
+                    </p>
+                </form>
+                <p>
+                    <button @click="updateToken({{ id }})" style="font-size: 200%; padding: 20px; cursor: pointer">
+                        OPERATE TOKEN for
+                        shop#{{ id }}</button>
+                </p>
+            </td>
+            <td style="width: 100%; border: 1px #000 solid; vertical-align: top; padding: 20px 30px">
+                <div id="results" style="padding: 20px; background: #eee"></div>
+            </td>
+        </tr>
+
+    </table>
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.18.0/axios.js"></script>
+<script src="/assets/app.js?dt={{ date }}"></script>
+</body>
+</html>
